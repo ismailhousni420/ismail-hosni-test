@@ -1,6 +1,6 @@
 ---
 - name: Install Apache on Ubuntu
-hosts: webservers
+hosts: isamil
 become: true
 tasks:
 - name: Update APT package cache
