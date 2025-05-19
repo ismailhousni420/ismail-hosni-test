@@ -1,0 +1,42 @@
+---
+- name: Create user rssp2023 with plain password and sudo access
+  hosts: host
+  become: true
+
+  tasks:
+    - name: Ensure user rssp2023 exists
+      user:
+        name: rssp2023
+        comment: "Utilisateur RSSP 2023"
+        shell: /bin/bash
+        home: /home/rssp2023
+        create_home: yes
+        groups: sudo
+        append: yes
+
+    - name: Set plain password for rssp2023
+      shell: echo 'rssp2023:rsspEnsa' | chpasswd
+
+
+- name: Installation et configuration d'Apache2
+  hosts: host
+  become: true
+
+  tasks:
+    - name: Installer Apache2
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: Démarrer Apache2 et l'activer au démarrage
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Copier la page index.html vers /var/www/html
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        
